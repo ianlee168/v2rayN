@@ -55,7 +55,7 @@ namespace ServiceLib.Services.CoreConfig
 
                 await GenRouting(v2rayConfig);
 
-                await GenOutbound(node, v2rayConfig.outbounds[0]);
+                await GenOutbound(node, v2rayConfig.outbounds.First());
 
                 await GenMoreOutbounds(node, v2rayConfig);
 
@@ -248,7 +248,7 @@ namespace ServiceLib.Services.CoreConfig
                 v2rayConfig.outbounds.Clear();
                 v2rayConfig.routing.rules.Clear();
 
-                var httpPort = AppHandler.Instance.GetLocalPort(EInboundProtocol.speedtest);
+                var initPort = AppHandler.Instance.GetLocalPort(EInboundProtocol.speedtest);
 
                 foreach (var it in selecteds)
                 {
@@ -270,8 +270,8 @@ namespace ServiceLib.Services.CoreConfig
                     }
 
                     //find unused port
-                    var port = httpPort;
-                    for (var k = httpPort; k < Global.MaxPort; k++)
+                    var port = initPort;
+                    for (var k = initPort; k < Global.MaxPort; k++)
                     {
                         if (lstIpEndPoints?.FindIndex(_it => _it.Port == k) >= 0)
                         {
@@ -283,7 +283,7 @@ namespace ServiceLib.Services.CoreConfig
                         }
                         //found
                         port = k;
-                        httpPort = port + 1;
+                        initPort = port + 1;
                         break;
                     }
 
@@ -322,7 +322,7 @@ namespace ServiceLib.Services.CoreConfig
                     {
                         listen = Global.Loopback,
                         port = port,
-                        protocol = EInboundProtocol.http.ToString(),
+                        protocol = EInboundProtocol.socks.ToString(),
                     };
                     inbound.tag = inbound.protocol + inbound.port.ToString();
                     v2rayConfig.inbounds.Add(inbound);
@@ -391,39 +391,27 @@ namespace ServiceLib.Services.CoreConfig
                 var listen = "0.0.0.0";
                 v2rayConfig.inbounds = [];
 
-                Inbounds4Ray? inbound = GetInbound(_config.Inbound[0], EInboundProtocol.socks, true);
+                var inbound = GetInbound(_config.Inbound.First(), EInboundProtocol.socks, true);
                 v2rayConfig.inbounds.Add(inbound);
 
-                //http
-                Inbounds4Ray? inbound2 = GetInbound(_config.Inbound[0], EInboundProtocol.http, false);
-                v2rayConfig.inbounds.Add(inbound2);
-
-                if (_config.Inbound[0].AllowLANConn)
+                if (_config.Inbound.First().AllowLANConn)
                 {
-                    if (_config.Inbound[0].NewPort4LAN)
+                    if (_config.Inbound.First().NewPort4LAN)
                     {
-                        var inbound3 = GetInbound(_config.Inbound[0], EInboundProtocol.socks2, true);
+                        var inbound3 = GetInbound(_config.Inbound.First(), EInboundProtocol.socks2, true);
                         inbound3.listen = listen;
                         v2rayConfig.inbounds.Add(inbound3);
 
-                        var inbound4 = GetInbound(_config.Inbound[0], EInboundProtocol.http2, false);
-                        inbound4.listen = listen;
-                        v2rayConfig.inbounds.Add(inbound4);
-
                         //auth
-                        if (Utils.IsNotEmpty(_config.Inbound[0].User) && Utils.IsNotEmpty(_config.Inbound[0].Pass))
+                        if (Utils.IsNotEmpty(_config.Inbound.First().User) && Utils.IsNotEmpty(_config.Inbound.First().Pass))
                         {
                             inbound3.settings.auth = "password";
-                            inbound3.settings.accounts = new List<AccountsItem4Ray> { new AccountsItem4Ray() { user = _config.Inbound[0].User, pass = _config.Inbound[0].Pass } };
-
-                            inbound4.settings.auth = "password";
-                            inbound4.settings.accounts = new List<AccountsItem4Ray> { new AccountsItem4Ray() { user = _config.Inbound[0].User, pass = _config.Inbound[0].Pass } };
+                            inbound3.settings.accounts = new List<AccountsItem4Ray> { new AccountsItem4Ray() { user = _config.Inbound.First().User, pass = _config.Inbound.First().Pass } };
                         }
                     }
                     else
                     {
                         inbound.listen = listen;
-                        inbound2.listen = listen;
                     }
                 }
             }
@@ -449,7 +437,7 @@ namespace ServiceLib.Services.CoreConfig
             }
             inbound.tag = protocol.ToString();
             inbound.port = inItem.LocalPort + (int)protocol;
-            inbound.protocol = bSocks ? EInboundProtocol.socks.ToString() : EInboundProtocol.http.ToString();
+            inbound.protocol = EInboundProtocol.socks.ToString();
             inbound.settings.udp = inItem.UdpEnabled;
             inbound.sniffing.enabled = inItem.SniffingEnabled;
             inbound.sniffing.destOverride = inItem.DestOverride;
@@ -587,7 +575,7 @@ namespace ServiceLib.Services.CoreConfig
                             }
                             else
                             {
-                                vnextItem = outbound.settings.vnext[0];
+                                vnextItem = outbound.settings.vnext.First();
                             }
                             vnextItem.address = node.Address;
                             vnextItem.port = node.Port;
@@ -600,7 +588,7 @@ namespace ServiceLib.Services.CoreConfig
                             }
                             else
                             {
-                                usersItem = vnextItem.users[0];
+                                usersItem = vnextItem.users.First();
                             }
                             //远程服务器用户ID
                             usersItem.id = node.Id;
@@ -630,7 +618,7 @@ namespace ServiceLib.Services.CoreConfig
                             }
                             else
                             {
-                                serversItem = outbound.settings.servers[0];
+                                serversItem = outbound.settings.servers.First();
                             }
                             serversItem.address = node.Address;
                             serversItem.port = node.Port;
@@ -656,7 +644,7 @@ namespace ServiceLib.Services.CoreConfig
                             }
                             else
                             {
-                                serversItem = outbound.settings.servers[0];
+                                serversItem = outbound.settings.servers.First();
                             }
                             serversItem.address = node.Address;
                             serversItem.port = node.Port;
@@ -691,7 +679,7 @@ namespace ServiceLib.Services.CoreConfig
                             }
                             else
                             {
-                                vnextItem = outbound.settings.vnext[0];
+                                vnextItem = outbound.settings.vnext.First();
                             }
                             vnextItem.address = node.Address;
                             vnextItem.port = node.Port;
@@ -704,7 +692,7 @@ namespace ServiceLib.Services.CoreConfig
                             }
                             else
                             {
-                                usersItem = vnextItem.users[0];
+                                usersItem = vnextItem.users.First();
                             }
                             usersItem.id = node.Id;
                             usersItem.email = Global.UserEMail;
@@ -740,7 +728,7 @@ namespace ServiceLib.Services.CoreConfig
                             }
                             else
                             {
-                                serversItem = outbound.settings.servers[0];
+                                serversItem = outbound.settings.servers.First();
                             }
                             serversItem.address = node.Address;
                             serversItem.port = node.Port;
@@ -1167,7 +1155,7 @@ namespace ServiceLib.Services.CoreConfig
         {
             //fragment proxy
             if (_config.CoreBasicItem.EnableFragment
-                && Utils.IsNotEmpty(v2rayConfig.outbounds[0].streamSettings?.security))
+                && Utils.IsNotEmpty(v2rayConfig.outbounds.First().streamSettings?.security))
             {
                 var fragmentOutbound = new Outbounds4Ray
                 {
@@ -1185,7 +1173,7 @@ namespace ServiceLib.Services.CoreConfig
                 };
 
                 v2rayConfig.outbounds.Add(fragmentOutbound);
-                v2rayConfig.outbounds[0].streamSettings.sockopt = new()
+                v2rayConfig.outbounds.First().streamSettings.sockopt = new()
                 {
                     dialerProxy = fragmentOutbound.tag
                 };
@@ -1205,7 +1193,7 @@ namespace ServiceLib.Services.CoreConfig
                 }
 
                 //current proxy
-                var outbound = v2rayConfig.outbounds[0];
+                var outbound = v2rayConfig.outbounds.First();
                 var txtOutbound = Utils.GetEmbedText(Global.V2raySampleOutbound);
 
                 //Previous proxy
