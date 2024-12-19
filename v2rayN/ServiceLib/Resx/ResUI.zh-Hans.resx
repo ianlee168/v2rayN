@@ -755,7 +755,7 @@
     <value>开启流量探测</value>
   </data>
   <data name="TbSettingsSocksPort" xml:space="preserve">
-    <value>本地socks监听端口</value>
+    <value>本地混合监听端口</value>
   </data>
   <data name="TbSettingsStartBoot" xml:space="preserve">
     <value>开机启动(可能会不成功)</value>
@@ -992,7 +992,7 @@
     <value>拷贝字体TTF/TTC文件到目录guiFonts，重启设置</value>
   </data>
   <data name="TbSettingsSocksPortTip" xml:space="preserve">
-    <value>http端口= +1；Pac端口= +4；*ray API端口= +5；mihomo API端口= +6；</value>
+    <value>Pac端口= +2；Xray API端口= +3；mihomo API端口= +4；</value>
   </data>
   <data name="TbSettingsStartBootTip" xml:space="preserve">
     <value>以管理员权限设置此项，在启动后获得管理员权限</value>
@@ -1361,7 +1361,7 @@
     <value>备注备忘</value>
   </data>
   <data name="TbSettingsLinuxSudoPassword" xml:space="preserve">
-    <value>Linux系统的sudo密码</value>
+    <value>系统的sudo密码</value>
   </data>
   <data name="TbSettingsLinuxSudoPasswordTip" xml:space="preserve">
     <value>密码已加密且只存储在本地文件中，无密码则每次都要输入</value>
@@ -1380,5 +1380,11 @@
   </data>
   <data name="TbSettingsHide2TrayWhenClose" xml:space="preserve">
     <value>关闭窗口时隐藏至托盘</value>
+  </data>
+  <data name="TbSettingsSpeedTestPageSize" xml:space="preserve">
+    <value>测试时自动分批的每批数量（最大1000）</value>
+  </data>
+  <data name="TbSettingsExceptionTip2" xml:space="preserve">
+    <value>例外. 对于下列地址不使用代理配置文件:使用逗号(,)分隔</value>
   </data>
 </root>

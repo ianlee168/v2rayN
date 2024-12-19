@@ -24,7 +24,6 @@ namespace v2rayN.Views
 
             _config = AppHandler.Instance.Config;
 
-            Application.Current.Exit += Current_Exit;
             btnAutofitColumnWidth.Click += BtnAutofitColumnWidth_Click;
             txtServerFilter.PreviewKeyDown += TxtServerFilter_PreviewKeyDown;
             lstProfiles.PreviewKeyDown += LstProfiles_PreviewKeyDown;
@@ -90,14 +89,10 @@ namespace v2rayN.Views
 
             RestoreUI();
             ViewModel?.RefreshServers();
+            MessageBus.Current.Listen<string>(EMsgCommand.AppExit.ToString()).Subscribe(StorageUI);
         }
 
         #region Event
-
-        private void Current_Exit(object sender, ExitEventArgs e)
-        {
-            StorageUI();
-        }
 
         private async Task<bool> UpdateViewHandler(EViewAction action, object? obj)
         {
@@ -228,6 +223,12 @@ namespace v2rayN.Views
             {
                 switch (e.Key)
                 {
+                    case Key.V:
+                        var clipboardData = WindowsUtils.GetClipboardData();
+                        var service = Locator.Current.GetService<MainWindowViewModel>();
+                        if (service != null) _ = service.AddServerViaClipboardAsync(clipboardData);
+                        break;
+
                     case Key.A:
                         menuSelectAll_Click(null, null);
                         break;
@@ -340,17 +341,14 @@ namespace v2rayN.Views
                         }
                         if (item.Name.ToLower().StartsWith("to"))
                         {
-                            if (!_config.GuiItem.EnableStatistics)
-                            {
-                                item2.Visibility = Visibility.Hidden;
-                            }
+                            item2.Visibility = _config.GuiItem.EnableStatistics ? Visibility.Visible : Visibility.Hidden;
                         }
                     }
                 }
             }
         }
 
-        private void StorageUI()
+        private void StorageUI(string? n = null)
         {
             List<ColumnItem> lvColumnItem = new();
             for (int k = 0; k < lstProfiles.Columns.Count; k++)
@@ -364,7 +362,6 @@ namespace v2rayN.Views
                 });
             }
             _config.UiItem.MainColumnItem = lvColumnItem;
-            ConfigHandler.SaveConfig(_config);
         }
 
         #endregion UI

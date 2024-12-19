@@ -3059,6 +3059,15 @@ namespace ServiceLib.Resx {
         }
         
         /// <summary>
+        ///   查找类似 Exception. Do not use proxy server for addresses,with a comma (,) 的本地化字符串。
+        /// </summary>
+        public static string TbSettingsExceptionTip2 {
+            get {
+                return ResourceManager.GetString("TbSettingsExceptionTip2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Follow System Theme 的本地化字符串。
         /// </summary>
         public static string TbSettingsFollowSystemTheme {
@@ -3140,7 +3149,7 @@ namespace ServiceLib.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Linux system sudo password 的本地化字符串。
+        ///   查找类似 System sudo password 的本地化字符串。
         /// </summary>
         public static string TbSettingsLinuxSudoPassword {
             get {
@@ -3311,7 +3320,7 @@ namespace ServiceLib.Resx {
         }
         
         /// <summary>
-        ///   查找类似 SOCKS Port 的本地化字符串。
+        ///   查找类似 Mixed Port 的本地化字符串。
         /// </summary>
         public static string TbSettingsSocksPort {
             get {
@@ -3320,7 +3329,7 @@ namespace ServiceLib.Resx {
         }
         
         /// <summary>
-        ///   查找类似 http port = +1; Pac port = +4; *ray API port = +5; mihomo API port = +6; 的本地化字符串。
+        ///   查找类似 Pac port = +2; Xray API port = +3; mihomo API port = +4; 的本地化字符串。
         /// </summary>
         public static string TbSettingsSocksPortTip {
             get {
@@ -3334,6 +3343,15 @@ namespace ServiceLib.Resx {
         public static string TbSettingsSpeedPingTestUrl {
             get {
                 return ResourceManager.GetString("TbSettingsSpeedPingTestUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Number per time for auto batch during speedtest(max 1000) 的本地化字符串。
+        /// </summary>
+        public static string TbSettingsSpeedTestPageSize {
+            get {
+                return ResourceManager.GetString("TbSettingsSpeedTestPageSize", resourceCulture);
             }
         }
         
